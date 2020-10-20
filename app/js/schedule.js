@@ -26,7 +26,7 @@ Schedule.prototype = {
 				this.startHour = startHour;
 				this.endHour = endHour;
 			} else {
-				throw new Error('the starthour must less the endhour');
+				throw new Error('the start hour must less the end hour');
 			}
 			
 		} else {
@@ -50,7 +50,7 @@ Schedule.prototype = {
 
 				this.DiffDays();
 			} else {
-				throw new Error('the startdate must less or equals to the enddate');
+				throw new Error('the start date must earlier or equals to the end date');
 			}
 		} else {
 			throw new Error('function setDate need a date');
