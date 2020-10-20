@@ -4,18 +4,28 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="description" content="Plugin for building a responsive shift schedule">
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
-	<title>Plugin for building a responsive shift schedule</title>
-	<!-- jquery --> 
-    <script src="https://code.jquery.com/jquery-latest.js"></script> 
-    <script src="js/shift_schedule.js"></script> 
+	<title>Plugin for building a responsive schedule</title>
+    <script src="js/schedule.js"></script> 
+    <!-- CSS -->
+    <link rel="stylesheet" href="style/style.css">
 </head>
 
 <body>
-    <script>
-        var shift_schedule = new Shift_schedule(new Date(1987,07,14), new Date(1987,07,16));
-        console.log(shift_schedule);
-    </script>
+    <div id="header">
+        <h1>Plugin for building a responsive schedule</h1>
+    </div>
 
-    <h1>Plugin for building a responsive shift schedule</h1>
+    <div id="schedule">
+    </div>
+
+    <script>
+        var schedule = new Schedule();
+
+        schedule.setTime(9,9);
+        schedule.setDate(new Date('2020-01-01'), new Date('2020-01-03'));
+        
+        var draft = new Schedule.Renderer(schedule);
+
+    </script>
 </body>
 </html>
