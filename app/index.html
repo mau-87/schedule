@@ -23,9 +23,9 @@
 
         schedule.setTime(9,9);
         schedule.setDate(new Date('2020-01-01'), new Date('2020-01-03'));
-        
-        var draft = new Schedule.Renderer(schedule);
-
+ 
+        var renderer = new Schedule.Renderer(schedule);
+        renderer.draw('#schedule');
     </script>
 </body>
 </html>
