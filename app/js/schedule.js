@@ -72,3 +72,69 @@ Schedule.Renderer = function(s) {
 	}
 	this.Schedule = s;
 };
+
+Schedule.Renderer.prototype = {
+	draw: function(selector) {
+		var schedule = this.schedule;
+
+		var container = document.querySelector(selector);
+
+		// var scopeDurationHours = getDurationHours(timetable.scope.hourStart, timetable.scope.hourEnd);
+		var divDesignation = appendDivDesignation(container);
+		var divTimeline = appendDivTimeline(container);
+	
+
+		function appendDivDesignation(container) {
+		div = container.appendChild(document.createElement('div'));
+		div.id = "designation"
+		div.className = 'col-25';
+		return appendTableDesignation(div);
+	}
+
+	function appendTableDesignation(div) {
+		table = div.appendChild(document.createElement('table'));
+		table.id = "table_designation"
+		return appendTableTrHeaderDesignation(table);
+	}
+
+	function appendTableTrHeaderDesignation(table) {
+		for (let index = 0; index < 2; index++) {
+			var tr = table.appendChild(document.createElement('tr'));
+			var td = document.createElement('td');
+
+			td.appendChild(document.createTextNode('\u00A0'));
+			tr.appendChild(td);
+			
+		}		
+	}
+
+	function appendDivTimeline(container) {
+		div = container.appendChild(document.createElement('div'));
+		div.id = "timeline"
+		div.className = 'col-75';
+		return appendTableTimeline(div);
+	}
+
+	function appendTableTimeline(div) {
+		table = div.appendChild(document.createElement('table'));
+		table.id = "table_timeline"
+		return appendTableTrHeaderTimeline(table);
+	}
+
+	function appendTableTrHeaderTimeline(table) {
+		var tr = table.appendChild(document.createElement('tr'));
+		var date = this.schedule.date_range.startDate;
+
+		for (let index = 0; index <= this.schedule.date_range.days; index++) {
+			var td = document.createElement('th');
+
+			td.appendChild(document.createTextNode(date.toLocaleDateString()));
+			tr.appendChild(td);
+			
+			date.setDate(date.getDate() +1);
+		}		
+	}
+
+	}
+};
+
