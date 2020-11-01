@@ -167,11 +167,11 @@ Schedule.Renderer.prototype = {
 			
 			for (let date_counter = 0; date_counter <= schedule.date_range.days; date_counter++) {
 				for (let index = schedule.time_range.startHour; index <= schedule.time_range.endHour; index++) {
-					var td = document.createElement('td');
+					var th = document.createElement('th');
 					
-					td.colSpan = schedule.table.colSpanHour;
-					td.appendChild(document.createTextNode(index+' Uhr'));
-					tr.appendChild(td);
+					th.colSpan = schedule.table.colSpanHour;
+					th.appendChild(document.createTextNode(index+' Uhr'));
+					tr.appendChild(th);
 					
 				}
 			}
