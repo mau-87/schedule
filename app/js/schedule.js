@@ -89,7 +89,70 @@ Schedule.prototype = {
 		this.table.colSpanHour = 60 / this.time_range.timeDivision;
 	},
 
+	getHourSpan: function() {
+		return this.table.colSpanHour;
+	},
+
+	getTimeSpan: function() {
+		return (this.time_range.endHour - this.time_range.startHour) + 1;
+	},
+
+	addRow: function(text) {
+		var table_designation = document.getElementById('table_designation');
+		var tr = table_designation.appendChild(document.createElement('tr'));
+		var td = document.createElement('td');
+
+		td.appendChild(document.createTextNode(text));
+		tr.appendChild(td);
+
+		var table_timeline = document.getElementById('table_timeline');
+		tr = table_timeline.appendChild(document.createElement('tr'));
+		
+		for (let index = 0; index <= this.date_range.days; index++) {
+			for (let index = 0; index < this.table.colSpanDate; index++) {
+				td = document.createElement('td');
+				td.appendChild(document.createTextNode('\u00A0'));
+				tr.appendChild(td);
+			}
+		}	
 	}
+		}	
+
+	},
+
+	getTableAsObject: function () {
+		var table_designation = document.getElementById('table_designation');
+		var table_timeline = document.getElementById("table_timeline");
+		var getTableAsObject = new Object();
+		var obj_date = new Object();
+		var obj_employee = new Object();
+		
+		for (var iTableRow = 2, row_designation ; row_designation  = table_designation.rows[iTableRow]; iTableRow++) {
+			var tdCounter = 0;
+			var obj_date = new Object();
+
+			for (var iDateTh = 0, colDateTh ; colDateTh  = table_timeline.rows[0].cells[iDateTh]; iDateTh++) {
+				var obj_time = new Object();
+				
+				for (var iTimeTh = 0; iTimeTh <= this.getTimeSpan()-1; iTimeTh++) {
+					var obj_minute = new Object();
+					
+					for (var iMinute = tdCounter; iMinute <= tdCounter + this.getHourSpan()-1; iMinute++) {
+						obj_minute[iMinute] = String(table_timeline.rows[iTableRow].cells[iMinute].className);						
+					}
+					tdCounter = iMinute
+					obj_time[table_timeline.rows[1].cells[iTimeTh].innerText] = obj_minute;
+				}
+
+				obj_date[colDateTh.innerText] = obj_time;
+
+			}
+			obj_employee[row_designation.innerText] = obj_date;
+		}
+		
+		return getTableAsObject['table'] = obj_employee;
+	}
+
 
 };
 
