@@ -12,8 +12,21 @@ body {
 	background-color: #c9c9c9;
 }
 
-table {
+#schedule table {
     width: 100%;
+    border: 1px solid #000;
+    border-collapse: collapse;
+}
+
+#schedule table tr {
+    border: 1px solid #000;
+}
+
+#schedule table tr td {
+    border: 1px solid #000;
+}
+
+#schedule table tr th {
     border: 1px solid #000;
 }
 
@@ -30,6 +43,11 @@ table {
     white-space: nowrap;
     padding-left: 10px;
     padding-right: 10px;
+    text-align: center;
+}
+
+#timeline .activated {
+    background-color: crimson;
 }
 
 .col-25 {
