@@ -7,7 +7,8 @@ var Schedule = function() {
 	
 	this.date_range = {
 		startDate: new Date('1970-01-01'),
-		endDate: new Date('1970-01-01'),	
+		endDate: new Date('1970-01-01'),
+		days: 1	
 	};
 	
 	this.table = {
