@@ -13,7 +13,8 @@ var Schedule = function() {
 	
 	this.table = {
 		colSpanDate: 96,
-		colSpanHour: 4
+		colSpanHour: 4,
+		schedule_data: {}
 	}
 
 	this.data = [];
@@ -97,6 +98,18 @@ Schedule.prototype = {
 		return (this.time_range.endHour - this.time_range.startHour) + 1;
 	},
 
+	getTableRow: function() {
+		return  document.getElementById('table_timeline').rows.length;
+	},
+
+	getTableDate: function(column) {
+		return document.getElementById('table_timeline').rows[0].cells[column].innerHTML;
+	},
+
+	getTableTime: function(column) {
+		return document.getElementById('table_timeline').rows[1].cells[column].innerHTML;
+	},
+
 	addRow: function(text) {
 		var table_designation = document.getElementById('table_designation');
 		var tr = table_designation.appendChild(document.createElement('tr'));
@@ -115,15 +128,39 @@ Schedule.prototype = {
 				tr.appendChild(td);
 			}
 		}	
-	}
-		}	
 
 	},
 
-	getTableAsObject: function () {
+	formatDate: function(date) {
+		var d = new Date(date),
+			month = '' + (d.getMonth() + 1),
+			day = '' + d.getDate(),
+			year = d.getFullYear();
+	
+		if (month.length < 2) month = '0' + month;
+		if (day.length < 2) day = '0' + day;
+	
+		return [year, month, day].join('-');
+	},
+
+	lpad: function(value, padString, length) {
+		while (value.length < length)
+			value = padString + value;
+		return value;
+	},
+
+	setSchedule: function(obj) {
+		if(typeof obj === 'object' && obj !== null) {
+			this.table.schedule_data = obj;
+		} else {
+			throw new Error('function setSchedule need an Object!');
+		}
+	},
+
+	getSchedule: function () {
 		var table_designation = document.getElementById('table_designation');
 		var table_timeline = document.getElementById("table_timeline");
-		var getTableAsObject = new Object();
+		var getSchedule = new Object();
 		var obj_date = new Object();
 		var obj_employee = new Object();
 		
@@ -150,7 +187,8 @@ Schedule.prototype = {
 			obj_employee[row_designation.innerText] = obj_date;
 		}
 		
-		return getTableAsObject['table'] = obj_employee;
+		return getSchedule['table'] = obj_employee;
+	},
 	}
 
 
