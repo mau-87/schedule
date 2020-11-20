@@ -121,14 +121,27 @@ Schedule.prototype = {
 		var table_timeline = document.getElementById('table_timeline');
 		tr = table_timeline.appendChild(document.createElement('tr'));
 		
-		for (let index = 0; index <= this.date_range.days; index++) {
-			for (let index = 0; index < this.table.colSpanDate; index++) {
+		var row = this.getTableRow();
+
+		for (let index_day = 0; index_day <= this.date_range.days; index_day++) {
+			var date_parts = this.getTableDate(index_day).split(".");
+			var column_date = new Date(date_parts[2], date_parts[1] - 1, date_parts[0]);
+
+			for (let index_hour = 0; index_hour < this.table.colSpanDate; index_hour++) {
+				var column_hour = this.lpad(this.getNumberColumnHour(index_hour),"0",2);
+
 				td = document.createElement('td');
 				td.appendChild(document.createTextNode('\u00A0'));
-				tr.appendChild(td);
+				td.setAttribute("id", row + "_" + this.formatDate(column_date) + "_" + column_hour);
+				tr.appendChild(td);				
 			}
 		}	
 
+	}, 
+
+	getNumberColumnHour: function(value) {
+		var column_hour = value / this.table.colSpanHour;
+		return column_hour.toString().split(".")[0];
 	},
 
 	formatDate: function(date) {
