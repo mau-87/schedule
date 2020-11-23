@@ -188,7 +188,12 @@ Schedule.prototype = {
 					var obj_minute = new Object();
 					
 					for (var iMinute = tdCounter; iMinute <= tdCounter + this.getHourSpan()-1; iMinute++) {
-						obj_minute[iMinute] = String(table_timeline.rows[iTableRow].cells[iMinute].className);						
+						var temp = 0;
+						if(table_timeline.rows[iTableRow].cells[iMinute].className == "activated") {
+							temp = 1;
+						}
+						
+						obj_minute[iMinute] = temp;						
 					}
 					tdCounter = iMinute
 					obj_time[table_timeline.rows[1].cells[iTimeTh].innerText] = obj_minute;
