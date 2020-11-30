@@ -174,7 +174,6 @@ Schedule.prototype = {
 	getSchedule: function () {
 		var table_designation = document.getElementById('table_designation');
 		var table_timeline = document.getElementById("table_timeline");
-		var getSchedule = new Object();
 		var obj_date = new Object();
 		var obj_employee = new Object();
 		
@@ -213,8 +212,52 @@ Schedule.prototype = {
 
 		return obj_employee;
 	},
-	}
 
+	isScheduleAvalible: function () {
+		if(Object.keys(this.table.schedule_data).length > 0) {
+			var table_timeline = document.getElementById("table_timeline");
+			var schedule_data = this.table.schedule_data;
+			for (var employee in schedule_data) {
+				this.addRow(schedule_data[employee]['employee']);
+				var schedules = schedule_data[employee];
+				for (var schedule in schedules) {
+					if(schedule == "schedule" && typeof schedules[schedule] === 'object' && schedules[schedule] !== null) {
+						var dates = schedules[schedule];
+						for (var date in dates) {
+							var hours = dates[date];
+							for (var column_date = 0, col_date; col_date = table_timeline.rows[0].cells[column_date]; column_date++) {
+								if(date == col_date.innerHTML) {
+									for (var hour in hours) {
+										for (var column_hour = 0, col_hour; col_hour = table_timeline.rows[1].cells[column_hour]; column_hour++) {
+											if(hour == col_hour.innerHTML) {
+												var minutes = hours[hour];
+												if(Object.keys(hours[hour]).length == this.table.colSpanHour) {
+													for (var minute in minutes) {
+														if(minutes[minute] == 1) {
+															var column = this.getColumnToSetActiv(column_date, column_hour, minute);
+															var row = this.getRows("table_timeline");
+															table_timeline.rows[row-1].cells[column].className = "activated";
+														}
+													}
+												} else {
+													this.clearScheduleData();
+													return;
+												}
+												
+												break;
+											}
+										}
+										
+									}
+									break;
+								}
+							} 
+						}
+					}					
+				}
+			}
+		} 
+	},
 
 	getColumnToSetActiv: function(column_date, column_hour, column_minute) {
 		return (column_date * this.table.colSpanDate) + (column_hour * this.table.colSpanHour) + (column_minute * 1);
@@ -251,8 +294,9 @@ Schedule.Renderer = function(s) {
 };
 
 Schedule.Renderer.prototype = {
-	draw: function(selector) {
+	draw: function() {
 		var schedule = this.schedule;
+		var selector = schedule.table.selector;
 
 		schedule.setColSpanHour();
 		schedule.setColSpanDate();
@@ -261,7 +305,8 @@ Schedule.Renderer.prototype = {
 
 		var divDesignation = appendDivDesignation(container);
 		var divTimeline = appendDivTimeline(container);
-	
+		
+		schedule.isScheduleAvalible();
 
 		function appendDivDesignation(container) {
 			div = container.appendChild(document.createElement('div'));
