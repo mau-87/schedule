@@ -181,32 +181,37 @@ Schedule.prototype = {
 		for (var iTableRow = 2, row_designation ; row_designation  = table_designation.rows[iTableRow]; iTableRow++) {
 			var tdCounter = 0;
 			var obj_date = new Object();
+			var obj_schedule = new Object();
 
 			for (var iDateTh = 0, colDateTh ; colDateTh  = table_timeline.rows[0].cells[iDateTh]; iDateTh++) {
 				var obj_time = new Object();
 				
 				for (var iTimeTh = 0; iTimeTh <= this.getTimeSpan()-1; iTimeTh++) {
 					var obj_minute = new Object();
-					
+					var counter_minute = 0;
+
 					for (var iMinute = tdCounter; iMinute <= tdCounter + this.getHourSpan()-1; iMinute++) {
 						var temp = 0;
 						if(table_timeline.rows[iTableRow].cells[iMinute].className == "activated") {
 							temp = 1;
 						}
 						
-						obj_minute[iMinute] = temp;						
+						obj_minute[counter_minute] = temp;
+						counter_minute++;
 					}
 					tdCounter = iMinute
 					obj_time[table_timeline.rows[1].cells[iTimeTh].innerText] = obj_minute;
 				}
-
+				
 				obj_date[colDateTh.innerText] = obj_time;
 
 			}
-			obj_employee[row_designation.innerText] = obj_date;
+			obj_schedule['schedule'] = obj_date;
+			obj_schedule['employee'] = row_designation.innerText;
+			obj_employee[iTableRow-2] = obj_schedule;
 		}
-		
-		return getSchedule['table'] = obj_employee;
+
+		return obj_employee;
 	},
 	}
 
