@@ -14,7 +14,8 @@ var Schedule = function() {
 	this.table = {
 		colSpanDate: 96,
 		colSpanHour: 4,
-		schedule_data: {}
+		schedule_data: {},
+		selector: "#schedule"
 	}
 
 	this.data = [];
@@ -209,6 +210,31 @@ Schedule.prototype = {
 	},
 	}
 
+
+	getColumnToSetActiv: function(column_date, column_hour, column_minute) {
+		return (column_date * this.table.colSpanDate) + (column_hour * this.table.colSpanHour) + (column_minute * 1);
+	},
+
+	getRows: function(table) {
+		return document.getElementById(table).rows.length;
+	},
+
+	destroy: function() {
+		var selector = this.table.selector;
+		document.getElementById(selector.replace("#","")).innerHTML = "";
+	},
+
+	clearScheduleData: function() {
+		var table_designation = document.getElementById('table_designation');
+		var table_timeline = document.getElementById("table_timeline");
+
+		this.table.schedule_data = new Object();
+
+		for (var row = table_designation.rows.length; row  > 2; row--) { 
+			table_timeline.deleteRow(row-1);
+			table_designation.deleteRow(row-1);
+		}
+	}
 
 };
 
