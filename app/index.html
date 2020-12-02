@@ -6,26 +6,97 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 	<title>Plugin for building a responsive schedule</title>
     <script src="js/schedule.js"></script> 
+    <script src="js/jquery-3.5.1.min.js"></script> 
     <!-- CSS -->
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="css/schedule.css">
 </head>
 
 <body>
     <div id="header">
         <h1>Plugin for building a responsive schedule</h1>
     </div>
+    <button id="addRow" style="margin: 5px;">neue Zeile</button>
+    <button id="getSchedule" style="margin: 5px;">getSchedule</button>
 
-    <div id="schedule">
+    <div id="schedule" oncontextmenu="return false;">
     </div>
 
     <script>
         var schedule = new Schedule();
+        var table = JSON.parse('{"0":{"schedule":{"1.1.2020":{"0 Uhr":{"0":1,"1":1},"1 Uhr":{"0":0,"1":0},"2 Uhr":{"0":0,"1":0}}},"employee":"Employee A"},"1":{"schedule":{"1.1.2020":{"0 Uhr":{"0":0,"1":0},"1 Uhr":{"0":1,"1":1},"2 Uhr":{"0":0,"1":0}}},"employee":"Employee B"},"2":{"schedule":{"1.1.2020":{"0 Uhr":{"0":0,"1":0},"1 Uhr":{"0":0,"1":0},"2 Uhr":{"0":1,"1":0}}},"employee":"Employee C"}}');
+    
+        schedule.setSchedule(table);
 
-        schedule.setTime(9,9);
-        schedule.setDate(new Date('2020-01-01'), new Date('2020-01-03'));
- 
+        schedule.setTime(0,5);
+        schedule.setDate(new Date('2020-01-01'), new Date('2020-01-01'));
+        schedule.setTimeDivision(30);
         var renderer = new Schedule.Renderer(schedule);
         renderer.draw('#schedule');
+
+        schedule.addRow('Employee D');
+        schedule.addRow('Employee E');
+
+        var row_source = 0;
+        var col_source = 0;
+        var row_target = 0;
+        var col_target = 0;
+
+        // example for click events to add a new row to schedule
+        $(document).on("click", "#addRow", function(){
+            schedule.addRow('tbd');
+        });
+        
+        $(document).on("click", "#getSchedule", function(){
+            console.log(JSON.stringify(schedule.getSchedule()));
+        });
+
+        // example for click events to use the schedule
+        $(document).on("click", "td", function(){
+            if($(this).hasClass("select")) {
+                $(this).removeClass("select");
+            }
+            if($(this).hasClass("activated")) {
+                $(this).removeClass("activated");
+            } else {
+                $(this).addClass("activated");
+            }
+            
+            row_source = 0;
+            col_source = 0;
+
+        });
+        
+        // example for click events to use the schedule
+        $(document).on("contextmenu", "td", function(){
+            if(row_source == 0 && col_source == 0) {
+                $(this).addClass("select");
+                row_source = $(this).parent().index();
+                col_source = $(this).index();
+            } else {
+                if(row_source > $(this).parent().index()) {
+                    row_target = row_source;
+                    row_source = $(this).parent().index();
+                } else {
+                    row_target = $(this).parent().index();
+                }
+
+                if(col_source > $(this).index()) {
+                    col_target = col_source;
+                    col_source = $(this).index();
+                } else {
+                    col_target = $(this).index();
+                }
+
+                for (let row = row_source; row <= row_target; row++) {
+                    for (let col = col_source; col <= col_target; col++) {
+                        document.getElementById('table_timeline').rows[row].cells[col].className = 'activated';
+                    }
+                }
+
+                row_source = 0;
+                col_source = 0;
+            }
+        });
     </script>
 </body>
 </html>
